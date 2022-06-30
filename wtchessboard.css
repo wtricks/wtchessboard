@@ -1,0 +1,260 @@
+/**
+ * WTChessBoard - A small & fast javascript chess board
+ * 
+ * @author Anuj Kumar <webtricks.ak@gmail.com>
+ * @link https://github.com/wtricks/wtchessboard
+ * @link https://instagram.com/webtricks.ak
+ */
+ 
+.wt-chess {
+    --white: url(./img/w-white.png);
+    --black: url(./img/w-black.png);
+    --border: url(./img/w-border.png);
+    --capture: 253, 58, 58;
+    --valid: 255, 255, 255;
+    --check: 250, 253, 58;
+    --square: 120px;
+    --pieceTransition: 1.2s;
+    --boardTransition: 0.5s;
+    perspective: 900px;
+    height: 100%;
+    width: 100%;
+}
+
+.wt-chess-inner {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1;
+    position: relative;
+    transform-style: preserve-3d;
+    z-index: 100;
+    box-shadow: 0 0 20px 5px rgb(0 0 0 / 10%), 0 0 5px 12px rgb(0 0 0 / 10%);
+}
+
+.wt-chess-inner.animate {
+    transition: var(--boardTransition);
+}
+
+.wt-chess.marble {
+    --white: url(./img/m-white.png);
+    --black: url(./img/m-black.png);
+    --border: url(./img/m-border.png);
+}
+
+.wt-chess.black .wt-chess-inner {
+    transform: rotateZ(180deg);
+}
+
+.wt-chess.pause .wt-chess-inner {
+    transform: rotateX(80deg) rotateZ(90deg);
+}
+
+.wt-chess.black.pause .wt-chess-inner {
+    transform: rotateX(80deg) rotateZ(-90deg);
+}
+
+.wt-square {
+    height: calc(100% / 8);
+    width: calc(100% / 8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(var(--valid), 0.445);
+    font-size: 12px;
+    transform-style: preserve-3d;
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-transform: uppercase;
+    transform-style: preserve-3d;
+    position: relative;
+    user-select: none;
+}
+
+.wt-square.hover {
+    z-index: 100;
+}
+.wt-square.white {
+    background-image: var(--white);
+}
+
+.wt-square.black {
+    background-image: var(--black);
+}
+
+.wt-chess.border .wt-square {
+    width: 10.625%;
+    height: 10.625%;
+    display: flex;
+}
+
+.wt-square.wt-border-width {
+    width: 7.5% !important;
+    display: none;
+    background-position: left center;
+    background-size: 350% auto;
+    background-image: var(--border);
+}
+
+.wt-square.wt-border-height {
+    height: 7.5% !important;
+    display: none;
+    background-position: center top;
+    background-size: 250% auto;
+    background-image: var(--border);
+}
+
+.wt-square:nth-child(1) {
+    background-size: auto 350%;
+    background-position: left top;
+}
+
+.wt-square:nth-child(10) {
+    background-size: auto 350%;
+    background-position: right top;
+}
+
+.wt-square:nth-child(91) {
+    background-size: auto 350%;
+    background-position: left bottom;
+}
+
+.wt-square:nth-child(100) {
+    background-size: auto 350%;
+    background-position: right bottom;
+}
+
+.wt-square:nth-child(20), 
+.wt-square:nth-child(30), 
+.wt-square:nth-child(40), 
+.wt-square:nth-child(50), 
+.wt-square:nth-child(60), 
+.wt-square:nth-child(70), 
+.wt-square:nth-child(80), 
+.wt-square:nth-child(90) {
+    background-position: right center;
+}
+
+.wt-square:nth-child(92), 
+.wt-square:nth-child(93), 
+.wt-square:nth-child(94), 
+.wt-square:nth-child(95), 
+.wt-square:nth-child(96), 
+.wt-square:nth-child(97), 
+.wt-square:nth-child(98), 
+.wt-square:nth-child(99) {
+    background-position: center bottom;
+}
+
+.wt-square.valid::before,
+.wt-square.valid::after,
+.wt-square.check::before,
+.wt-square.check::after,
+.wt-square.capture::before,
+.wt-square.capture::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80%;
+    width: 80%;
+    border-radius: 50%;
+}
+
+.wt-square.valid::before,
+.wt-square.check::before,
+.wt-square.capture::before {
+    height: 35%;
+    width: 35%;
+}
+
+.wt-square.capture::before {
+    background-color: rgba(var(--capture), .4);
+}
+
+.wt-square.check::before {
+    background-color: rgba(var(--check), .4);
+}
+
+.wt-square.valid::before{
+    background-color: rgba(var(--valid), .4);
+}
+
+.wt-square.capture.hover::after {
+    border: 8px solid rgba(var(--capture), 0.4);
+    box-shadow: 0px 0px 50px 36px rgb(var(--capture), 0.4);
+}
+
+.wt-square.check.hover::after {
+    border: 8px solid rgba(var(--check), 0.4);
+    box-shadow: 0px 0px 50px 36px rgb(var(--check), 0.4);
+}
+
+.wt-square.valid.hover::after{
+    border: 8px solid rgba(var(--valid), 0.4);
+    box-shadow: 0px 0px 50px 36px rgb(var(--valid), 0.4);
+}
+
+.wt-square.capture.hover::before {
+    background-color: rgba(var(--capture));
+    box-shadow: 0px 0px 35px 36px rgba(var(--capture), .4);
+}
+
+.wt-square.check.hover::before {
+    background-color:rgba(var(--check));
+    box-shadow: 0px 0px 50px 10px rgba(var(--check), .4);
+}
+
+.wt-square.valid.hover::before{
+    background-color: rgb(var(--valid));
+    box-shadow: 0px 0px 50px 36px rgba(var(--valid), .4);
+}
+
+.wt-piece {
+    position: absolute;
+    height: var(--square);
+    width: var(--square);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 75%;
+    cursor: grab;
+    z-index: 120;
+}
+
+.wt-piece.animate {
+    transition: var(--pieceTransition);
+}
+
+.wt-piece.active {
+    z-index: 150;
+}
+
+.wt-chess.black .wt-piece {
+    transform: rotateZ(180deg);
+}
+
+.wt-piece:active {
+    cursor: grabbing;
+    transform: translateY(8%);
+}
+
+.wt-chess.black .wt-piece:active {
+    transform: translateY(-8%) rotateZ(180deg);
+}
+
+.wt-piece.capture::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 35%;
+    width: 35%;
+    border-radius: 50%;
+    background-color: rgba(var(--capture), .4);
+}
